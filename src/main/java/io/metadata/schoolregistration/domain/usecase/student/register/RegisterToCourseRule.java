@@ -2,15 +2,15 @@ package io.metadata.schoolregistration.domain.usecase.student.register;
 
 import io.metadata.schoolregistration.domain.entity.Course;
 import io.metadata.schoolregistration.domain.entity.Student;
-import io.metadata.schoolregistration.domain.gateway.CourseGateway;
-import io.metadata.schoolregistration.domain.gateway.StudentGateway;
 import io.metadata.schoolregistration.infra.error.exception.CourseEnrollmentLimitException;
 import io.metadata.schoolregistration.infra.error.exception.StudentAlreadyEnrolledInCourseException;
 import io.metadata.schoolregistration.infra.error.exception.StudentEnrollmentLimitException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-public record RegisterToCourseRule(StudentGateway studentGateway, CourseGateway courseGateway) {
+@RequiredArgsConstructor
+public class RegisterToCourseRule {
     public void executeRule(Student student, Course course) {
         student.courses().ifPresent(courses -> {
             if (courses.stream().anyMatch(c -> c.id().equals(course.id()))) {

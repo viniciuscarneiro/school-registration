@@ -1,4 +1,4 @@
-package io.metadata.schoolregistration.adpter;
+package io.metadata.schoolregistration.infra.adpter;
 
 import io.metadata.schoolregistration.domain.entity.Course;
 import io.metadata.schoolregistration.domain.entity.Student;
