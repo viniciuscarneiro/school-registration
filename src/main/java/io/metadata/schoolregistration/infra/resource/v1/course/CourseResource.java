@@ -1,12 +1,12 @@
 package io.metadata.schoolregistration.infra.resource.v1.course;
 
 import io.metadata.schoolregistration.domain.entity.Course;
-import io.metadata.schoolregistration.domain.usecase.FindAllUseCase;
+import io.metadata.schoolregistration.domain.usecase.FetchAllUseCase;
+import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.create.CreateUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.delete.DeleteUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.read.FindAllForSpecificStudentUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.read.FindAllWithoutStudentsUseCase;
-import io.metadata.schoolregistration.domain.usecase.course.read.FindByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.update.UpdateUseCase;
 import io.metadata.schoolregistration.infra.adapter.course.CourseMapper;
 import io.metadata.schoolregistration.infra.resource.v1.course.model.request.CreateCourseRequest;
@@ -14,7 +14,6 @@ import io.metadata.schoolregistration.infra.resource.v1.course.model.request.Upd
 import io.metadata.schoolregistration.infra.resource.v1.course.model.response.CourseModel;
 import io.metadata.schoolregistration.infra.resource.v1.course.model.response.CourseModelAssembler;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +32,12 @@ public class CourseResource {
     private final CreateUseCase createUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
-    private final FindByIdUseCase findByIdUseCase;
+    @Qualifier("fetchCourseByIdUseCase")
+    private final FetchByIdUseCase<Course> fetchCourseByIdUseCase;
     @Qualifier("findAllSummarizedCoursesUseCase")
-    private final FindAllUseCase<Course> findAllSummarizedCoursesUseCase;
+    private final FetchAllUseCase<Course> findAllSummarizedCoursesUseCase;
     @Qualifier("findAllDetailedCoursesUseCase")
-    private final FindAllUseCase<Course> findAllDetailedCoursesUseCase;
+    private final FetchAllUseCase<Course> findAllDetailedCoursesUseCase;
     private final FindAllForSpecificStudentUseCase findAllForSpecificStudentUseCase;
     private final FindAllWithoutStudentsUseCase findAllWithoutStudentsUseCase;
     private final CourseModelAssembler courseModelAssembler;
@@ -75,7 +75,7 @@ public class CourseResource {
 
     @GetMapping("/courses/{id}")
     public ResponseEntity<CourseModel> findById(@PathVariable Long id) {
-        var result = findByIdUseCase.execute(id);
+        var result = fetchCourseByIdUseCase.execute(id);
         return ResponseEntity.ok(courseModelAssembler.toModel(result));
     }
 

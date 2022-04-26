@@ -1,12 +1,12 @@
 package io.metadata.schoolregistration.infra.resource.v1.student;
 
 import io.metadata.schoolregistration.domain.entity.Student;
-import io.metadata.schoolregistration.domain.usecase.FindAllUseCase;
+import io.metadata.schoolregistration.domain.usecase.FetchAllUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.create.CreateUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.delete.DeleteUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.read.FindAllWithSpecificCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.read.FindAllWithoutCoursesUseCase;
-import io.metadata.schoolregistration.domain.usecase.student.read.FindByIdUseCase;
+import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.register.RegisterToCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.unregister.UnregisterFromCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.update.UpdateUseCase;
@@ -33,11 +33,12 @@ public class StudentResource {
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
     private final FindAllWithoutCoursesUseCase findAllWithoutCoursesUseCase;
-    private final FindByIdUseCase findByIdUseCase;
+    @Qualifier("findStudentByIdUseCase")
+    private final FetchByIdUseCase<Student> fetchStudentByIdUseCase;
     @Qualifier("findAllSummarizedStudentsUseCase")
-    private final FindAllUseCase<Student> findAllSummarizedStudentsUseCase;
+    private final FetchAllUseCase<Student> fetchAllSummarizedStudentsUseCase;
     @Qualifier("findAllDetailedStudentsUseCase")
-    private final FindAllUseCase<Student> findAllDetailedStudentsUseCase;
+    private final FetchAllUseCase<Student> fetchAllDetailedStudentsUseCase;
     private final RegisterToCourseUseCase registerToCourseUseCase;
     private final FindAllWithSpecificCourseUseCase findAllWithSpecificCourseUseCase;
     private final UnregisterFromCourseUseCase unregisterFromCourseUseCase;
@@ -77,7 +78,7 @@ public class StudentResource {
 
     @GetMapping("/students/{id}")
     public ResponseEntity<StudentModel> findById(@PathVariable Long id) {
-        var foundStudent = findByIdUseCase.execute(id);
+        var foundStudent = fetchStudentByIdUseCase.execute(id);
         return ResponseEntity.ok(studentModelAssembler.toModel(foundStudent));
     }
 
@@ -86,9 +87,9 @@ public class StudentResource {
             @RequestParam(value = "detailed", defaultValue = "false") Boolean detailed) {
         var result = new ArrayList<Student>();
         if (Boolean.TRUE.equals(detailed)) {
-            result.addAll(findAllDetailedStudentsUseCase.execute());
+            result.addAll(fetchAllDetailedStudentsUseCase.execute());
         } else {
-            result.addAll(findAllSummarizedStudentsUseCase.execute());
+            result.addAll(fetchAllSummarizedStudentsUseCase.execute());
         }
         return ResponseEntity.ok(studentModelAssembler.toCollectionModel(result));
     }

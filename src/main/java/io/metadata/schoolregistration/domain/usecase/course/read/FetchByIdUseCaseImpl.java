@@ -2,12 +2,13 @@ package io.metadata.schoolregistration.domain.usecase.course.read;
 
 import io.metadata.schoolregistration.domain.entity.Course;
 import io.metadata.schoolregistration.domain.gateway.CourseGateway;
+import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service("findCourseByIdUseCase")
+@Service("fetchCourseByIdUseCase")
 @RequiredArgsConstructor
-public class FindByIdUseCaseImpl implements FindByIdUseCase {
+public class FetchByIdUseCaseImpl implements FetchByIdUseCase<Course> {
     private final CourseGateway courseGateway;
 
     @Override

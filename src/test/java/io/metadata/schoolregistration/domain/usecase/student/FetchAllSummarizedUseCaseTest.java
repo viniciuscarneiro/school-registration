@@ -14,7 +14,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FindAllSummarizedUseCaseTest {
+class FetchAllSummarizedUseCaseTest {
 
     @Mock
     private StudentGateway studentGateway;
