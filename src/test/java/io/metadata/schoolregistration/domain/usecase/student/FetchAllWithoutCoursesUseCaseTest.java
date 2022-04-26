@@ -1,7 +1,7 @@
 package io.metadata.schoolregistration.domain.usecase.student;
 
 import io.metadata.schoolregistration.domain.gateway.StudentGateway;
-import io.metadata.schoolregistration.domain.usecase.student.read.FetchAllDetailedUseCaseImpl;
+import io.metadata.schoolregistration.domain.usecase.student.read.FetchAllWithoutCoursesUseCaseImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,18 +14,18 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FetchAllDetailedUseCaseTest {
+class FetchAllWithoutCoursesUseCaseTest {
 
     @Mock
     private StudentGateway studentGateway;
 
     @InjectMocks
-    private FetchAllDetailedUseCaseImpl findAllDetailedUseCase;
+    private FetchAllWithoutCoursesUseCaseImpl fetchAllWithoutCoursesUseCase;
 
     @Test
-    void should_fetch_all_detailed() {
-        when(studentGateway.findAll(Boolean.TRUE)).thenReturn(List.of());
-        Assertions.assertDoesNotThrow(() -> findAllDetailedUseCase.execute());
-        verify(studentGateway, times(1)).findAll(Boolean.TRUE);
+    void should_fetch_all_without_courses() {
+        when(studentGateway.findAllWithoutCourses()).thenReturn(List.of());
+        Assertions.assertDoesNotThrow(() -> fetchAllWithoutCoursesUseCase.execute());
+        verify(studentGateway, times(1)).findAllWithoutCourses();
     }
 }

@@ -4,6 +4,6 @@ import io.metadata.schoolregistration.domain.entity.Student;
 
 import java.util.List;
 
-public interface FindAllWithSpecificCourseUseCase {
+public interface FetchAllWithSpecificCourseUseCase {
     List<Student> execute(Long courseId);
 }

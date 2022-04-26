@@ -4,8 +4,8 @@ import io.metadata.schoolregistration.domain.entity.Student;
 import io.metadata.schoolregistration.domain.usecase.FetchAllUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.create.CreateUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.delete.DeleteUseCase;
-import io.metadata.schoolregistration.domain.usecase.student.read.FindAllWithSpecificCourseUseCase;
-import io.metadata.schoolregistration.domain.usecase.student.read.FindAllWithoutCoursesUseCase;
+import io.metadata.schoolregistration.domain.usecase.student.read.FetchAllWithSpecificCourseUseCase;
+import io.metadata.schoolregistration.domain.usecase.student.read.FetchAllWithoutCoursesUseCase;
 import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.register.RegisterToCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.unregister.UnregisterFromCourseUseCase;
@@ -32,7 +32,7 @@ public class StudentResource {
     private final CreateUseCase createUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
-    private final FindAllWithoutCoursesUseCase findAllWithoutCoursesUseCase;
+    private final FetchAllWithoutCoursesUseCase fetchAllWithoutCoursesUseCase;
     @Qualifier("findStudentByIdUseCase")
     private final FetchByIdUseCase<Student> fetchStudentByIdUseCase;
     @Qualifier("findAllSummarizedStudentsUseCase")
@@ -40,7 +40,7 @@ public class StudentResource {
     @Qualifier("findAllDetailedStudentsUseCase")
     private final FetchAllUseCase<Student> fetchAllDetailedStudentsUseCase;
     private final RegisterToCourseUseCase registerToCourseUseCase;
-    private final FindAllWithSpecificCourseUseCase findAllWithSpecificCourseUseCase;
+    private final FetchAllWithSpecificCourseUseCase fetchAllWithSpecificCourseUseCase;
     private final UnregisterFromCourseUseCase unregisterFromCourseUseCase;
     private final StudentModelAssembler studentModelAssembler;
     private final StudentMapper studentMapper;
@@ -96,7 +96,7 @@ public class StudentResource {
 
     @GetMapping("/students/without-courses")
     public ResponseEntity<CollectionModel<StudentModel>> findStudentsWithoutCourses() {
-        var foundStudents = findAllWithoutCoursesUseCase.execute();
+        var foundStudents = fetchAllWithoutCoursesUseCase.execute();
         return ResponseEntity.ok(studentModelAssembler.toCollectionModel(foundStudents));
     }
 
@@ -116,7 +116,7 @@ public class StudentResource {
     @GetMapping("/students/courses/{course_id}")
     public ResponseEntity<CollectionModel<StudentModel>> findStudentsWithSpecificCourse(
             @PathVariable("course_id") Long courseId) {
-        var foundStudents = findAllWithSpecificCourseUseCase.execute(courseId);
+        var foundStudents = fetchAllWithSpecificCourseUseCase.execute(courseId);
         return ResponseEntity.ok(studentModelAssembler.toCollectionModel(foundStudents));
     }
 

@@ -23,7 +23,7 @@ class FetchAllSummarizedUseCaseTest {
     private FetchAllSummarizedUseCaseImpl findAllSummarizedUseCase;
 
     @Test
-    void should_find_all() {
+    void should_fetch_all_summarized() {
         when(studentGateway.findAll(Boolean.FALSE)).thenReturn(List.of());
         Assertions.assertDoesNotThrow(() -> findAllSummarizedUseCase.execute());
         verify(studentGateway, times(1)).findAll(Boolean.FALSE);

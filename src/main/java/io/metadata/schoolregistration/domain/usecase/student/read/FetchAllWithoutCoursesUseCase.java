@@ -4,6 +4,6 @@ import io.metadata.schoolregistration.domain.entity.Student;
 
 import java.util.List;
 
-public interface FindAllWithoutCoursesUseCase {
+public interface FetchAllWithoutCoursesUseCase {
     List<Student> execute();
 }

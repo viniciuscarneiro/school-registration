@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FindAllWithSpecificCourseUseCaseImpl implements FindAllWithSpecificCourseUseCase {
+public class FetchAllWithSpecificCourseUseCaseImpl implements FetchAllWithSpecificCourseUseCase {
 
     private final StudentGateway studentGateway;
 
