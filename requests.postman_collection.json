@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "b3da7339-5962-430f-8e5d-00bff0445884",
+		"name": "School Registration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Course",
+			"item": [
+				{
+					"name": "crud",
+					"item": [
+						{
+							"name": "Create course",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Git lab hands on!\",\n    \"description\": \"The best course of school app\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:6868/v1/courses",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update course",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Git lab hands on\",\n    \"description\": \"Full course of git\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:6868/v1/courses/21",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses",
+										"21"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete course",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/courses/13",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses",
+										"13"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find all courses",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/courses?detailed=true",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses"
+									],
+									"query": [
+										{
+											"key": "detailed",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find course by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/courses/14",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses",
+										"14"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "specif requests",
+					"item": [
+						{
+							"name": "Find all courses for a specific student",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/courses/students/15",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses",
+										"students",
+										"15"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find all courses without any students",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Clean code\",\n    \"description\": \"Full course of clean code\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:6868/v1/courses/without-students",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"courses",
+										"without-students"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "crud",
+					"item": [
+						{
+							"name": "Create student",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identification_document\": \"87895206310\",\n    \"phone_number\": \"+5534998877410\",\n    \"full_name\": \"Toy Aleixo\",\n    \"email\": \"toy.aleixo@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:6868/v1/students",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update student",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phone_number\": \"+5534998874599\",\n\n    \"email\": \"joegold@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:6868/v1/students/10",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find all students",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/students/",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find student by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/students/15",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										"15"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "specific requests",
+					"item": [
+						{
+							"name": "Find all students with a specific course",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/students/courses/13",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										"courses",
+										"13"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find all students without any  course",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/students/without-courses",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										"without-courses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register to course",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/students/16/courses/14",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										"16",
+										"courses",
+										"14"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unregister from course",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:6868/v1/students/15/courses/18",
+									"host": [
+										"localhost"
+									],
+									"port": "6868",
+									"path": [
+										"v1",
+										"students",
+										"15",
+										"courses",
+										"18"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
