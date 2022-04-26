@@ -29,6 +29,11 @@ public class CourseDataGateway implements CourseGateway {
     }
 
     @Override
+    public Boolean existsById(Long courseId) {
+        return courseEntityRepository.existsById(courseId);
+    }
+
+    @Override
     public Course findById(Long courseId) {
         return courseEntityRepository
                 .findById(courseId)
@@ -43,11 +48,6 @@ public class CourseDataGateway implements CourseGateway {
         } else {
             return mapToCoursesList(courseEntityRepository.findAll(), Boolean.FALSE);
         }
-    }
-
-    @Override
-    public Boolean existsById(Long courseId) {
-        return courseEntityRepository.existsById(courseId);
     }
 
     @Override

@@ -10,11 +10,11 @@ public interface CourseGateway {
 
     void delete(Long courseId);
 
+    Boolean existsById(Long courseId);
+
     Course findById(Long courseId);
 
     List<Course> findAll(Boolean detailed);
-
-    Boolean existsById(Long courseId);
 
     List<Course> findAllForSpecificStudent(Long studentId);
 
