@@ -1,9 +1,10 @@
 package io.metadata.schoolregistration.infra.resource.v1.course;
 
+import io.metadata.schoolregistration.domain.entity.Course;
+import io.metadata.schoolregistration.domain.usecase.FindAllUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.create.CreateUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.delete.DeleteUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.read.FindAllForSpecificStudentUseCase;
-import io.metadata.schoolregistration.domain.usecase.course.read.FindAllUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.read.FindAllWithoutStudentsUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.read.FindByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.course.update.UpdateUseCase;
@@ -13,6 +14,8 @@ import io.metadata.schoolregistration.infra.resource.v1.course.model.request.Upd
 import io.metadata.schoolregistration.infra.resource.v1.course.model.response.CourseModel;
 import io.metadata.schoolregistration.infra.resource.v1.course.model.response.CourseModelAssembler;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/v1")
@@ -30,7 +34,10 @@ public class CourseResource {
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
     private final FindByIdUseCase findByIdUseCase;
-    private final FindAllUseCase findAllUseCase;
+    @Qualifier("findAllSummarizedCoursesUseCase")
+    private final FindAllUseCase<Course> findAllSummarizedCoursesUseCase;
+    @Qualifier("findAllDetailedCoursesUseCase")
+    private final FindAllUseCase<Course> findAllDetailedCoursesUseCase;
     private final FindAllForSpecificStudentUseCase findAllForSpecificStudentUseCase;
     private final FindAllWithoutStudentsUseCase findAllWithoutStudentsUseCase;
     private final CourseModelAssembler courseModelAssembler;
@@ -75,8 +82,13 @@ public class CourseResource {
     @GetMapping("/courses")
     public ResponseEntity<CollectionModel<CourseModel>> findAll(
             @RequestParam(value = "detailed", defaultValue = "false") Boolean detailed) {
-        var courses = findAllUseCase.execute(detailed);
-        return ResponseEntity.ok(courseModelAssembler.toCollectionModel(courses));
+        var result = new ArrayList<Course>();
+        if (Boolean.TRUE.equals(detailed)) {
+            result.addAll(findAllDetailedCoursesUseCase.execute());
+        } else {
+            result.addAll(findAllSummarizedCoursesUseCase.execute());
+        }
+        return ResponseEntity.ok(courseModelAssembler.toCollectionModel(result));
     }
 
     @GetMapping("/courses/students/{student_id}")
