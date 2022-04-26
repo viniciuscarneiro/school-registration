@@ -34,7 +34,7 @@ class RegisterToCourseUseCaseTest {
     private RegisterToCourseUseCaseImpl registerToCourseUseCase;
 
     @Test
-    void test() {
+    void should_register_to_course() {
         var courseId = 1L;
         var courseName = "Course name";
         var courseDescription = "Course description";
