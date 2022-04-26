@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface StudentGateway {
 
-    List<Student> findAllWithoutCourses();
-
-    Student persist(Student student, Boolean detailed);
+    Student persist(Student student, Boolean detailedResponse);
 
     void delete(Long studentId);
 
-    Student findById(Long studentId, Boolean detailed);
+    Student findById(Long studentId, Boolean detailedResponse);
 
-    List<Student> findAll(Boolean detailed);
+    List<Student> findAll(Boolean detailedResponse);
+
+    List<Student> findAllWithoutCourses();
 
     Boolean existsByIdentificationDocument(String identificationDocument);
 

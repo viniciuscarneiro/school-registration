@@ -42,8 +42,8 @@ public class CourseDataGateway implements CourseGateway {
     }
 
     @Override
-    public List<Course> findAll(Boolean detailed) {
-        if (Boolean.TRUE.equals(detailed)) {
+    public List<Course> findAll(Boolean detailedResponse) {
+        if (Boolean.TRUE.equals(detailedResponse)) {
             return mapToCoursesList(courseEntityRepository.findAllBy(), Boolean.TRUE);
         } else {
             return mapToCoursesList(courseEntityRepository.findAll(), Boolean.FALSE);

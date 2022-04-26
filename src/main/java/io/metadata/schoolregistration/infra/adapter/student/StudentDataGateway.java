@@ -7,7 +7,6 @@ import io.metadata.schoolregistration.infra.error.exception.EntityNotFoundExcept
 import io.metadata.schoolregistration.infra.repository.StudentEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,16 +19,9 @@ public class StudentDataGateway implements StudentGateway {
     private final StudentEntityRepository studentEntityRepository;
 
     @Override
-    public List<Student> findAllWithoutCourses() {
-        return studentEntityRepository.findByCourseEntitiesIsNull().stream()
-                .map(entity -> studentMapper.toDomain(entity, Boolean.FALSE))
-                .toList();
-    }
-
-    @Override
-    public Student persist(Student student, Boolean detailed) {
+    public Student persist(Student student, Boolean detailedResponse) {
         var studentEntity = studentMapper.toEntity(student);
-        return studentMapper.toDomain(studentEntityRepository.save(studentEntity), detailed);
+        return studentMapper.toDomain(studentEntityRepository.save(studentEntity), detailedResponse);
     }
 
     @Override
@@ -38,19 +30,26 @@ public class StudentDataGateway implements StudentGateway {
     }
 
     @Override
-    public Student findById(Long studentId, Boolean detailed) {
-        if (Boolean.TRUE.equals(detailed)) {
+    public Student findById(Long studentId, Boolean detailedResponse) {
+        if (Boolean.TRUE.equals(detailedResponse)) {
             return mapToStudent(studentId, studentEntityRepository.findDetailedById(studentId), Boolean.TRUE);
         }
         return mapToStudent(studentId, studentEntityRepository.findById(studentId), Boolean.FALSE);
     }
 
     @Override
-    public List<Student> findAll(Boolean detailed) {
-        if (Boolean.TRUE.equals(detailed)) {
+    public List<Student> findAll(Boolean detailedResponse) {
+        if (Boolean.TRUE.equals(detailedResponse)) {
             return mapToStudentsList(studentEntityRepository.findAllBy(), Boolean.TRUE);
         }
         return mapToStudentsList(studentEntityRepository.findAll(), Boolean.FALSE);
+    }
+
+    @Override
+    public List<Student> findAllWithoutCourses() {
+        return studentEntityRepository.findByCourseEntitiesIsNull().stream()
+                .map(entity -> studentMapper.toDomain(entity, Boolean.FALSE))
+                .toList();
     }
 
     @Override
@@ -63,7 +62,6 @@ public class StudentDataGateway implements StudentGateway {
         return studentEntityRepository.existsById(studentId);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Student> findAllWithSpecificCourse(Long courseId) {
         return studentEntityRepository.findByCourseEntitiesId(courseId).stream()

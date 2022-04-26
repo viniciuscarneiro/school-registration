@@ -14,7 +14,7 @@ public interface CourseGateway {
 
     Course findById(Long courseId);
 
-    List<Course> findAll(Boolean detailed);
+    List<Course> findAll(Boolean detailedResponse);
 
     List<Course> findAllForSpecificStudent(Long studentId);
 
