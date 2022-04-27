@@ -237,53 +237,53 @@ Example Response
 ----
 GET - Find all courses for a specific student
 ----
-	localhost:6868/v1/courses/students/15
+	localhost/v1/courses/students/1
 ----
 
 Example Request
 ----
-	curl --location --request GET 'localhost:6868/v1/courses/1'
+	curl --location --request GET 'localhost/v1/courses/students/1'
 ----
 Example Response
 ----
     {
-        "_embedded": {
-            "courses": [
-                {
-                    "id": 2,
-                    "name": "Git lab hands on!",
-                    "description": "The best course of school app",
-                    "students": [
-                        {
-                            "id": 1,
-                            "email": "joegold@gmail.com",
-                            "_links": {
-                                "self": {
-                                    "href": "http://localhost:6868/v1/students/1"
-                                }
-                            },
-                            "full_name": "Vini",
-                            "phone_number": "+5534998874599",
-                            "identification_document": "87895206310"
-                        }
-                    ],
-                    "_links": {
-                        "self": {
-                            "href": "http://localhost:6868/v1/courses/2"
-                        },
-                        "courses": {
-                            "href": "http://localhost:6868/v1/courses?detailed=false"
-                        }
-                    }
-                }
-            ]
-        },
-        "_links": {
-            "self": {
-                "href": "http://localhost:6868/v1/courses?detailed=false"
-            }
-        }
-    }
+	   "_embedded":{
+	      "courses":[
+		 {
+		    "id":1,
+		    "name":"TDD Course",
+		    "description":"It will start soon, register right now!",
+		    "students":[
+		       {
+			  "id":1,
+			  "email":"email@email.com",
+			  "_links":{
+			     "self":{
+				"href":"http://localhost/v1/students/1"
+			     }
+			  },
+			  "full_name":"Full name",
+			  "phone_number":"+145896875",
+			  "identification_document":"78482399478"
+		       }
+		    ],
+		    "_links":{
+		       "self":{
+			  "href":"http://localhost/v1/courses/1"
+		       },
+		       "courses":{
+			  "href":"http://localhost/v1/courses?detailed=false"
+		       }
+		    }
+		 }
+	      ]
+	   },
+	   "_links":{
+	      "self":{
+		 "href":"http://localhost/v1/courses/students/1"
+	      }
+	   }
+	}
 ----
 GET - Find all courses without any students
 ----
@@ -627,7 +627,7 @@ Example Response
         },
     }
 ----
-DELETE - Register to course
+DELETE - Unregister from course
 ----
 	localhost:6868/v1/students/1/courses/2
 ----
