@@ -34,7 +34,7 @@ A RESTFul API that provides a series of functionality related to students and co
 - Java 17
   - If you have sdkman installed, just run `sdk env install` (https://sdkman.io/install)
 
-### Fill the .env file like the below example to run the project:
+### Fill the `.env` file like the below example to run the project:
 
 ----
     MYSQLDB_USER=root
