@@ -60,3 +60,152 @@ On the root folder execute the following command to run mysql and app containers
 ----
 
 # Provided endpoints
+# Course
+POST - Create course
+----
+	localhost:6868/v1/courses
+----
+Payload
+----
+	{
+        "name": "Git lab hands on!",
+        "description": "The best course of school app"
+    }
+----
+Example Request
+----
+	curl --location --request POST 'localhost:6868/v1/courses' \
+    --data-raw '{
+        "name": "Git lab hands on!",
+        "description": "The best course of school app"
+    }'
+----
+Example Response
+----
+    {
+        "id":11,
+        "name":"Git lab hands on!",
+        "description":"The best course of school app",
+        "_links":{
+            "self":{
+                "href":"http://localhost:6868/v1/courses/11"
+            },
+            "courses":{
+                "href":"http://localhost:6868/v1/courses?detailed=false"
+            }
+        }
+    }
+----
+PUT - Update course
+----
+	localhost:6868/v1/courses/21
+----
+Payload
+----
+	{
+        "name": "Git lab hands on!",
+        "description": "Full course of git"
+    }
+----
+Example Request
+----
+	curl --location --request PUT 'localhost:6868/v1/courses/11' \
+    --data-raw '{
+        "name": "Git lab hands on",
+        "description": "Full course of git"
+    }'
+----
+Example Response
+----
+    {
+        "id": 11,
+        "name": "Git lab hands on",
+        "description": "Full course of git",
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/courses/11"
+            },
+            "courses": {
+                "href": "http://localhost:6868/v1/courses?detailed=false"
+            }
+        }
+    }
+----
+DELETE - Update course
+----
+	localhost:6868/v1/courses/13
+----
+
+Example Request
+----
+	curl --location --request DELETE 'localhost:6868/v1/courses/13'
+----
+GET - Find all courses
+----
+	localhost:6868/v1/courses/21
+----
+Parameters
+----
+	detailed = true or false
+----
+If the detailed parameter value is equal to true, the answer will include the students enrolled in the course.  
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/courses?detailed=true'
+----
+Example Response
+----
+    {
+    "_embedded": {
+        "courses": [
+            {
+                "id": 2,
+                "name": "Git lab hands on!",
+                "description": "The best course of school app",
+                "students": [
+                    {
+                        "id": 1,
+                        "email": "joegold@gmail.com",
+                        "_links": {
+                            "self": {
+                                "href": "http://localhost:6868/v1/students/1"
+                            }
+                        },
+                        "full_name": "Vini",
+                        "phone_number": "+5534998874599",
+                        "identification_document": "87895206310"
+                    }
+                ],
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:6868/v1/courses/2"
+                    },
+                    "courses": {
+                        "href": "http://localhost:6868/v1/courses?detailed=false"
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "name": "Git lab hands on!",
+                "description": "The best course of school app",
+                "students": [],
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:6868/v1/courses/3"
+                    },
+                    "courses": {
+                        "href": "http://localhost:6868/v1/courses?detailed=false"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:6868/v1/courses?detailed=false"
+        }
+    }
+}
+----
