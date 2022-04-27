@@ -6,6 +6,7 @@ A RESTFul API that provides a series of functionality related to students and co
 - Create courses CRUD
 - Create API for students to register to courses
 - Create abilities for user to view all relationships between students and courses
+
 + Filter all students with a specific course
 + Filter all courses for a specific student
 + Filter all courses without any students
@@ -28,15 +29,17 @@ A RESTFul API that provides a series of functionality related to students and co
 
 ## Building and running  the project
 
-#### Requirements 
+#### Requirements
+
 - Docker(https://docs.docker.com/engine/install/)
 - Docker Compose(https://docs.docker.com/compose/install/)
 - Java 17
-  - If you have sdkman installed, just run `sdk env install` (https://sdkman.io/install)
+    - If you have sdkman installed, just run `sdk env install` (https://sdkman.io/install)
 
 ### Fill the `.env` file like the below example to run the project:
 
 ----
+
     MYSQLDB_USER=root
     MYSQLDB_ROOT_PASSWORD=123456
     MYSQLDB_DATABASE=school_registration_db
@@ -44,119 +47,158 @@ A RESTFul API that provides a series of functionality related to students and co
     MYSQLDB_DOCKER_PORT=3306
     SPRING_LOCAL_PORT=6868
     SPRING_DOCKER_PORT=8080
+
 ----
- It will configure the environment variables for the docker and the `application.properties` of the app.  
+It will configure the environment variables for the docker and the `application.properties` of the app.
 
 ### Running project
- On the root folder execute the following command to build mysql and app images.
+
+On the root folder execute the following command to build mysql and app images.
 
 ----
+
 	docker-compose build
+
 ----
 
 On the root folder execute the following command to run mysql and app containers.
 
 ----
+
 	docker-compose up
+
 ----
 
 # Provided endpoints
+
 # Course
+
 POST - Create course
 ----
-	localhost:6868/v1/courses
+
+      localhost:6868/v1/courses
+
+  
 ----
 Payload
 ----
-	{
-        "name": "Git lab hands on!",
-        "description": "The best course of school app"
-    }
+
+      {
+          "name": "Git lab hands on!",
+          "description": "The best course of school app"
+      }
+
+  
 ----
 Example Request
 ----
-	curl --location --request POST 'localhost:6868/v1/courses' \
-    --data-raw '{
-        "name": "Git lab hands on!",
-        "description": "The best course of school app"
-    }'
+
+      curl --location --request POST 'localhost:6868/v1/courses' \
+      --data-raw '{
+          "name": "Git lab hands on!",
+          "description": "The best course of school app"
+      }'
+
+  
 ----
 Example Response
 ----
-    {
-        "id":11,
-        "name":"Git lab hands on!",
-        "description":"The best course of school app",
+
+      {
+        "id":1,
+        "name":"TDD Course",
+        "description":"It will start soon, register right now!",
         "_links":{
             "self":{
-                "href":"http://localhost:6868/v1/courses/11"
+              "href":"http://localhost:6868/v1/courses/1"
             },
             "courses":{
-                "href":"http://localhost:6868/v1/courses?detailed=false"
-            }
+              "href":"http://localhost:6868/v1/courses?detailed=false"
+          }
         }
-    }
+      }
+
+  
 ----
 PUT - Update course
 ----
-	localhost:6868/v1/courses/21
+
+	localhost:6868/v1/courses/1
+
 ----
 Payload
 ----
+
 	{
-        "name": "Git lab hands on!",
-        "description": "Full course of git"
+      "name": "Git lab hands on!",
+      "description": "Full course of git"
     }
+
 ----
 Example Request
 ----
+
 	curl --location --request PUT 'localhost:6868/v1/courses/11' \
     --data-raw '{
         "name": "Git lab hands on",
         "description": "Full course of git"
     }'
+
 ----
 Example Response
 ----
+
     {
-        "id": 11,
+        "id": 1,
         "name": "Git lab hands on",
         "description": "Full course of git",
         "_links": {
             "self": {
-                "href": "http://localhost:6868/v1/courses/11"
+                "href": "http://localhost:6868/v1/courses/1"
             },
             "courses": {
                 "href": "http://localhost:6868/v1/courses?detailed=false"
             }
         }
     }
+
 ----
 DELETE - Update course
 ----
+
 	localhost:6868/v1/courses/13
+
 ----
 
 Example Request
 ----
+
 	curl --location --request DELETE 'localhost:6868/v1/courses/13'
+
 ----
 GET - Find all courses
 ----
-	localhost:6868/v1/courses/21
+
+	localhost:6868/v1/courses
+
 ----
 Parameters
 ----
+
 	detailed = true or false
+
 ----
-If the detailed parameter value is equal to true, the answer will include the students enrolled in the course.  
+If the detailed parameter value is equal to true, the response will include the students enrolled in the course.
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/courses?detailed=true'
+
 ----
 Example Response
 ----
+
     {
         "_embedded": {
             "courses": [
@@ -168,14 +210,14 @@ Example Response
                         {
                             "id": 1,
                             "email": "joegold@gmail.com",
+                            "full_name": "Vini",
+                            "phone_number": "+5534998874599",
+                            "identification_document": "87895206310",
                             "_links": {
                                 "self": {
                                     "href": "http://localhost:6868/v1/students/1"
                                 }
                             },
-                            "full_name": "Vini",
-                            "phone_number": "+5534998874599",
-                            "identification_document": "87895206310"
                         }
                     ],
                     "_links": {
@@ -209,18 +251,24 @@ Example Response
             }
         }
     }
+
 ----
 GET - Find course by id
 ----
+
 	localhost:6868/v1/courses/10
+
 ----
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/courses/10'
+
 ----
 Example Response
 ----
+
     {
         "id": 10,
         "name": "Git lab hands on!",
@@ -234,18 +282,24 @@ Example Response
             }
         }
     }
+
 ----
 GET - Find all courses for a specific student
 ----
-	localhost/v1/courses/students/1
+
+	localhost:6868/v1/courses/students/1
+
 ----
 
 Example Request
 ----
-	curl --location --request GET 'localhost/v1/courses/students/1'
+
+	curl --location --request GET 'localhost:6868/v1/courses/students/1'
+
 ----
 Example Response
 ----
+
     {
 	   "_embedded":{
 	      "courses":[
@@ -254,17 +308,17 @@ Example Response
 		    "name":"TDD Course",
 		    "description":"It will start soon, register right now!",
 		    "students":[
-		       {
-			  "id":1,
-			  "email":"email@email.com",
-			  "_links":{
-			     "self":{
-				"href":"http://localhost/v1/students/1"
-			     }
-			  },
-			  "full_name":"Full name",
-			  "phone_number":"+145896875",
-			  "identification_document":"78482399478"
+                {
+                    "id":1,
+                    "email":"email@email.com",
+                    "full_name":"Full name",
+                    "phone_number":"+145896875",
+                    "identification_document":"78482399478",
+                    "_links":{
+                       "self":{
+                          "href":"http://localhost/v1/students/1"
+                       }
+                    },
 		       }
 		    ],
 		    "_links":{
@@ -284,18 +338,24 @@ Example Response
 	      }
 	   }
 	}
+
 ----
 GET - Find all courses without any students
 ----
+
 	localhost:6868/v1/courses/without-students
+
 ----
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/courses/without-students'
+
 ----
 Example Response
 ----
+
     {
         "_embedded": {
             "courses": [
@@ -317,25 +377,31 @@ Example Response
         },
         "_links": {
             "self": {
-                "href": "http://localhost:6868/v1/courses?detailed=false"
+                "href": "http://localhost:6868/v1/courses/without-students"
             }
         }
     }
 
 # Student
+
 POST - Create student
 ----
+
 	localhost:6868/v1/students
+
 ----
 Payload
 ----
+
 	{
         "name": "Git lab hands on!",
         "description": "The best course of school app"
     }
+
 ----
 Example Request
 ----
+
     curl --location --request POST 'localhost:6868/v1/students' \
     --data-raw '{
         "identification_document": "12345678901",
@@ -343,9 +409,11 @@ Example Request
         "full_name": "Vini Brito",
         "email": "vini@metadata.io"
     }'
+
 ----
 Example Response
 ----
+
     {
         "id": 1,
         "email": "vini@metadata.io",
@@ -361,30 +429,38 @@ Example Response
             }
         }        
     }
+
 ----
 PUT - Update course
 ----
+
 	localhost:6868/v1/students/1
+
 ----
 Payload
 ----
+
 	{
         "email": "vini@metadata.io",
         "full_name": "Vini Carneiro Brito",
         "phone_number": "+553499995555"
     }
+
 ----
 Example Request
 ----
+
     curl --location --request PUT 'localhost:6868/v1/students/1' \
     --data-raw '{
         "email": "vini@metadata.io",
         "full_name": "Vini Carneiro Brito",
         "phone_number": "+553499995555"
     }'
+
 ----
 Example Response
 ----
+
     {
         "id": 1,
         "email": "vini@metadata.io",
@@ -400,29 +476,37 @@ Example Response
             }
         }        
     }
+
 ----
 GET - Find all students
 ----
+
 	localhost:6868/v1/students
+
 ----
 Parameters
 ----
+
 	detailed = true or false
+
 ----
 If the value of the verbose parameter equals true, the response will include the courses the student is enrolled in.
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/students?detailed=true'
+
 ----
 Example Response
 ----
+
     {
         "_embedded": {
             "students": [
                 {
                     "id": 1,
-                    "email": "joegold@gmail.com",                    
+                    "email": "vini@email.com",                    
                     "full_name": "Vini",
                     "phone_number": "+5534998874599",
                     "identification_document": "87895206310",
@@ -471,18 +555,24 @@ Example Response
             }
         }
     }
+
 ----
 GET - Find student by id
 ----
+
 	localhost:6868/v1/students/1
+
 ----
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/students/1'
+
 ----
 Example Response
 ----
+
     {
         "id": 1,
         "email": "vini@metadata.io",
@@ -498,18 +588,24 @@ Example Response
             }
         }        
     }
+
 ----
 GET - Find all students with a specific course
 ----
+
 	localhost:6868/v1/students/courses/2
+
 ----
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/students/courses/2'
+
 ----
 Example Response
 ----
+
     {
         "_embedded": {
             "students": [
@@ -544,22 +640,28 @@ Example Response
         },
         "_links": {
             "self": {
-                "href": "http://localhost:6868/v1/students?detailed=false"
+                "href": "http://localhost:6868/v1/students/courses/2"
             }
         }
     }
+
 ----
 GET - Find all students without any course
 ----
+
 	localhost:6868/v1/students/without-courses
+
 ----
 
 Example Request
 ----
+
 	curl --location --request GET 'localhost:6868/v1/students/without-courses'
+
 ----
 Example Response
 ----
+
     {
         "_embedded": {
             "students": [
@@ -583,22 +685,28 @@ Example Response
         },
         "_links": {
             "self": {
-                "href": "http://localhost:6868/v1/students?detailed=false"
+                "href": "http://localhost:6868/v1/students/without-courses"
             }
         }
     }
+
 ----
-PUT - Register to course
+PUT - Register student to course
 ----
+
 	localhost:6868/v1/students/1/courses/2
+
 ----
 
 Example Request
 ----
+
 	curl --location --request PUT 'localhost:6868/v1/students/1/courses/2'
+
 ----
 Example Response
 ----
+
     {
         "id": 1,
         "email": "joegold@gmail.com",
@@ -626,13 +734,18 @@ Example Response
             }
         },
     }
+
 ----
-DELETE - Unregister from course
+DELETE - Unregister student from course
 ----
+
 	localhost:6868/v1/students/1/courses/2
+
 ----
 
 Example Request
 ----
+
 	curl --location --request DELETE 'localhost:6868/v1/students/1/courses/2'
+
 ----
