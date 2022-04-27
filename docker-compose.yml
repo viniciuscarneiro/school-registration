@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mysqldb:
-    image: mysql:5.7
+    image: mysql:8.0
     restart: 'no'
     env_file: ./.env
     environment:
@@ -27,8 +27,11 @@ services:
         "spring.datasource.username" : "$MYSQLDB_USER",
         "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
-        "spring.jpa.hibernate.ddl-auto" : "update",
+        "spring.jpa.hibernate.ddl-auto" : "none",
         "spring.jpa.properties.open-in-view" : "false",
+        "flyway.url" : "jdbc:mysql://localhost:3307/school_registration_db?createDatabaseIfNotExist=true&useSSL=false",
+        "flyway.user" : "root",
+        "flyway.password" : "123456"
       }'
     stdin_open: true
     tty: true

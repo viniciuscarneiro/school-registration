@@ -137,7 +137,7 @@ class CourseResourceTest {
     @DirtiesContext
     void should_return_all_courses_detailed() throws Exception {
         var expectedResult =
-                "{\"_embedded\":{\"courses\":[{\"id\":1,\"name\":\"TDD Course\",\"description\":\"It will start soon, register right now!\",\"students\":[{\"id\":2,\"email\":\"email@email.com\",\"_links\":{\"self\":{\"href\":\"http://localhost/v1/students/2\"}},\"full_name\":\"Full name\",\"phone_number\":\"+145896875\",\"identification_document\":\"78482399478\"}],\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses/1\"},\"courses\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}";
+                "{\"_embedded\":{\"courses\":[{\"id\":1,\"name\":\"TDD Course\",\"description\":\"It will start soon, register right now!\",\"students\":[{\"id\":1,\"email\":\"email@email.com\",\"_links\":{\"self\":{\"href\":\"http://localhost/v1/students/1\"}},\"full_name\":\"Full name\",\"phone_number\":\"+145896875\",\"identification_document\":\"78482399478\"}],\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses/1\"},\"courses\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}";
         CourseEntity courseEntity = createCourseEntity();
         createStudentEntityWithCourseEntity(courseEntity);
         mockMvc.perform(get("/v1/courses?detailed=true"))
@@ -149,7 +149,7 @@ class CourseResourceTest {
     @DirtiesContext
     void should_return_all_courses_for_specific_student() throws Exception {
         var expectedResult =
-                "{\"_embedded\":{\"courses\":[{\"id\":1,\"name\":\"TDD Course\",\"description\":\"It will start soon, register right now!\",\"students\":[{\"id\":2,\"email\":\"email@email.com\",\"_links\":{\"self\":{\"href\":\"http://localhost/v1/students/2\"}},\"full_name\":\"Full name\",\"phone_number\":\"+145896875\",\"identification_document\":\"78482399478\"}],\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses/1\"},\"courses\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}";
+                "{\"_embedded\":{\"courses\":[{\"id\":1,\"name\":\"TDD Course\",\"description\":\"It will start soon, register right now!\",\"students\":[{\"id\":1,\"email\":\"email@email.com\",\"_links\":{\"self\":{\"href\":\"http://localhost/v1/students/1\"}},\"full_name\":\"Full name\",\"phone_number\":\"+145896875\",\"identification_document\":\"78482399478\"}],\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses/1\"},\"courses\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}";
         CourseEntity courseEntity = createCourseEntity();
         StudentEntity studentEntity = createStudentEntityWithCourseEntity(courseEntity);
         mockMvc.perform(get("/v1/courses/students/{student_id}", studentEntity.getId()))
@@ -161,7 +161,7 @@ class CourseResourceTest {
     @DirtiesContext
     void should_return_all_courses_without_students() throws Exception {
         var expectedResult =
-                "{\"_embedded\":{\"courses\":[{\"id\":3,\"name\":\"TDD Course\",\"description\":\"It will start soon, register right now!\",\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses/3\"},\"courses\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}";
+                "{\"_embedded\":{\"courses\":[{\"id\":2,\"name\":\"TDD Course\",\"description\":\"It will start soon, register right now!\",\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses/2\"},\"courses\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}]},\"_links\":{\"self\":{\"href\":\"http://localhost/v1/courses?detailed=false\"}}}";
         CourseEntity courseEntity = createCourseEntity();
         createStudentEntityWithCourseEntity(courseEntity);
         createCourseEntity();
