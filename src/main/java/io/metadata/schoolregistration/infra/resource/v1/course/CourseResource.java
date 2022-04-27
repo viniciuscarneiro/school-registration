@@ -16,14 +16,15 @@ import io.metadata.schoolregistration.infra.resource.v1.course.model.response.Co
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.ArrayList;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/v1")
@@ -32,12 +33,16 @@ public class CourseResource {
     private final CreateUseCase createUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
+
     @Qualifier("fetchCourseByIdUseCase")
     private final FetchByIdUseCase<Course> fetchByIdUseCase;
+
     @Qualifier("fetchAllSummarizedCoursesUseCase")
     private final FetchAllUseCase<Course> fetchAllSummarizeUseCase;
+
     @Qualifier("fetchAllDetailedCoursesUseCase")
     private final FetchAllUseCase<Course> fetchAllDetailedUseCase;
+
     private final FindAllForSpecificStudentUseCase findAllForSpecificStudentUseCase;
     private final FindAllWithoutStudentsUseCase findAllWithoutStudentsUseCase;
     private final CourseModelAssembler courseModelAssembler;
@@ -49,11 +54,10 @@ public class CourseResource {
             produces = {"application/json"})
     public ResponseEntity<CourseModel> create(@Valid @RequestBody CreateCourseRequest createCourseRequest) {
         var createdCourse = createUseCase.execute(courseMapper.toDomain(createCourseRequest));
-        final URI uri = MvcUriComponentsBuilder.fromController(getClass())
-                .path("/{id}")
-                .buildAndExpand(createdCourse.id())
-                .toUri();
-        return ResponseEntity.created(uri).body(courseModelAssembler.toModel(createdCourse));
+        var entityModel = courseModelAssembler.toModel(createdCourse);
+        return ResponseEntity.created(
+                        entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @PutMapping(
@@ -63,8 +67,10 @@ public class CourseResource {
     public ResponseEntity<CourseModel> update(
             @PathVariable Long id, @Valid @RequestBody UpdateCourseRequest updateCourseRequest) {
         var course = updateUseCase.execute(courseMapper.toDomain(id, updateCourseRequest));
-        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(courseModelAssembler.toModel(course));
+        var entityModel = courseModelAssembler.toModel(course);
+        return ResponseEntity.created(
+                        entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @DeleteMapping(value = "/courses/{id}")
@@ -95,12 +101,18 @@ public class CourseResource {
     public ResponseEntity<CollectionModel<CourseModel>> findAllForSpecificStudent(
             @PathVariable("student_id") Long studentId) {
         var courses = findAllForSpecificStudentUseCase.execute(studentId);
-        return ResponseEntity.ok(courseModelAssembler.toCollectionModel(courses));
+        var entityModel = courseModelAssembler.toCollectionModel(
+                courses,
+                linkTo(methodOn(CourseResource.class).findAllForSpecificStudent(studentId)).withSelfRel());
+        return ResponseEntity.ok(entityModel);
     }
 
     @GetMapping("/courses/without-students")
     public ResponseEntity<CollectionModel<CourseModel>> findAllWithoutStudents() {
         var courses = findAllWithoutStudentsUseCase.execute();
-        return ResponseEntity.ok(courseModelAssembler.toCollectionModel(courses));
+        var entityModel = courseModelAssembler.toCollectionModel(
+                courses,
+                linkTo(methodOn(CourseResource.class).findAllWithoutStudents()).withSelfRel());
+        return ResponseEntity.ok(entityModel);
     }
 }

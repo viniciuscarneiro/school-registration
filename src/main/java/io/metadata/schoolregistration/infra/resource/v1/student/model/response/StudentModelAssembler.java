@@ -6,10 +6,12 @@ import io.metadata.schoolregistration.infra.resource.v1.course.CourseResource;
 import io.metadata.schoolregistration.infra.resource.v1.course.model.response.CourseModel;
 import io.metadata.schoolregistration.infra.resource.v1.student.StudentResource;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -42,12 +44,7 @@ public class StudentModelAssembler extends RepresentationModelAssemblerSupport<S
 
     @Override
     public CollectionModel<StudentModel> toCollectionModel(Iterable<? extends Student> entities) {
-        var entityModels = StreamSupport.stream(entities.spliterator(), false)
-                .map(this::toModel)
-                .toList();
-        return CollectionModel.of(
-                entityModels,
-                List.of(linkTo(methodOn(StudentResource.class).findAll(false)).withSelfRel()));
+        return toCollectionModel(entities, null);
     }
 
     private Set<CourseModel> toCoursesModel(Set<Course> courses) {
@@ -64,5 +61,16 @@ public class StudentModelAssembler extends RepresentationModelAssemblerSupport<S
                                         .findById(course.id().orElseThrow()))
                                 .withSelfRel()))
                 .collect(Collectors.toSet());
+    }
+
+    public CollectionModel<StudentModel> toCollectionModel(Iterable<? extends Student> entities, Link selfLink) {
+        var entityModels = StreamSupport.stream(entities.spliterator(), false)
+                .map(this::toModel)
+                .toList();
+        return CollectionModel.of(
+                entityModels,
+                List.of(Optional.ofNullable(selfLink)
+                        .orElse(linkTo(methodOn(StudentResource.class).findAll(false))
+                                .withSelfRel())));
     }
 }

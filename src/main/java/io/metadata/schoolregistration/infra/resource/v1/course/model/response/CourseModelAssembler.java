@@ -6,10 +6,12 @@ import io.metadata.schoolregistration.infra.resource.v1.course.CourseResource;
 import io.metadata.schoolregistration.infra.resource.v1.student.StudentResource;
 import io.metadata.schoolregistration.infra.resource.v1.student.model.response.StudentModel;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -40,12 +42,18 @@ public class CourseModelAssembler extends RepresentationModelAssemblerSupport<Co
 
     @Override
     public CollectionModel<CourseModel> toCollectionModel(Iterable<? extends Course> entities) {
+        return toCollectionModel(entities, null);
+    }
+
+    public CollectionModel<CourseModel> toCollectionModel(Iterable<? extends Course> entities, Link selfLink) {
         var entityModels = StreamSupport.stream(entities.spliterator(), false)
                 .map(this::toModel)
                 .toList();
         return CollectionModel.of(
                 entityModels,
-                List.of(linkTo(methodOn(CourseResource.class).findAll(false)).withSelfRel()));
+                List.of(Optional.ofNullable(selfLink)
+                        .orElse(linkTo(methodOn(CourseResource.class).findAll(false))
+                                .withSelfRel())));
     }
 
     private Set<StudentModel> toStudentModel(Set<Student> courses) {

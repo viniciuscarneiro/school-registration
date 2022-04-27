@@ -2,11 +2,11 @@ package io.metadata.schoolregistration.infra.resource.v1.student;
 
 import io.metadata.schoolregistration.domain.entity.Student;
 import io.metadata.schoolregistration.domain.usecase.FetchAllUseCase;
+import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.create.CreateUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.delete.DeleteUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.read.FetchAllWithSpecificCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.read.FetchAllWithoutCoursesUseCase;
-import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.registercourse.RegisterToCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.unregister.UnregisterFromCourseUseCase;
 import io.metadata.schoolregistration.domain.usecase.student.update.UpdateUseCase;
@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -33,12 +36,16 @@ public class StudentResource {
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
     private final FetchAllWithoutCoursesUseCase fetchAllWithoutCoursesUseCase;
+
     @Qualifier("fetchStudentByIdUseCase")
     private final FetchByIdUseCase<Student> fetchByIdUseCase;
+
     @Qualifier("fetchAllSummarizedStudentsUseCase")
     private final FetchAllUseCase<Student> fetchAllSummarizedUseCase;
+
     @Qualifier("fetchAllDetailedStudentsUseCase")
     private final FetchAllUseCase<Student> fetchAllDetailedUseCase;
+
     private final RegisterToCourseUseCase registerToCourseUseCase;
     private final FetchAllWithSpecificCourseUseCase fetchAllWithSpecificCourseUseCase;
     private final UnregisterFromCourseUseCase unregisterFromCourseUseCase;
@@ -97,7 +104,11 @@ public class StudentResource {
     @GetMapping("/students/without-courses")
     public ResponseEntity<CollectionModel<StudentModel>> findStudentsWithoutCourses() {
         var foundStudents = fetchAllWithoutCoursesUseCase.execute();
-        return ResponseEntity.ok(studentModelAssembler.toCollectionModel(foundStudents));
+        var entityModel = studentModelAssembler.toCollectionModel(
+                foundStudents,
+                linkTo(methodOn(StudentResource.class).findStudentsWithoutCourses())
+                        .withSelfRel());
+        return ResponseEntity.ok(entityModel);
     }
 
     @PutMapping(
@@ -117,7 +128,11 @@ public class StudentResource {
     public ResponseEntity<CollectionModel<StudentModel>> findStudentsWithSpecificCourse(
             @PathVariable("course_id") Long courseId) {
         var foundStudents = fetchAllWithSpecificCourseUseCase.execute(courseId);
-        return ResponseEntity.ok(studentModelAssembler.toCollectionModel(foundStudents));
+        var entityModel = studentModelAssembler.toCollectionModel(
+                foundStudents,
+                linkTo(methodOn(StudentResource.class).findStudentsWithSpecificCourse(courseId))
+                        .withSelfRel());
+        return ResponseEntity.ok(entityModel);
     }
 
     @DeleteMapping(value = "/students/{id}/courses/{course_id}")
