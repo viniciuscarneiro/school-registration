@@ -31,7 +31,8 @@ A RESTFul API that provides a series of functionality related to students and co
 #### Requirements 
 - Docker(https://docs.docker.com/engine/install/)
 - Docker Compose(https://docs.docker.com/compose/install/)
-- Java 17, If you have sdkman installed, just run sdk env install (https://sdkman.io/install)
+- Java 17
+  - If you have sdkman installed, just run `sdk env install` (https://sdkman.io/install)
 
 ### Fill the .env file like the below example to run the project:
 
@@ -44,7 +45,7 @@ A RESTFul API that provides a series of functionality related to students and co
     SPRING_LOCAL_PORT=6868
     SPRING_DOCKER_PORT=8080
 ----
- It will configure the environment variables for the docker and the application.properties of the app.  
+ It will configure the environment variables for the docker and the `application.properties` of the app.  
 
 ### Running project
  On the root folder execute the following command to build mysql and app images.
@@ -157,55 +158,481 @@ Example Request
 Example Response
 ----
     {
-    "_embedded": {
+        "_embedded": {
+            "courses": [
+                {
+                    "id": 2,
+                    "name": "Git lab hands on!",
+                    "description": "The best course of school app",
+                    "students": [
+                        {
+                            "id": 1,
+                            "email": "joegold@gmail.com",
+                            "_links": {
+                                "self": {
+                                    "href": "http://localhost:6868/v1/students/1"
+                                }
+                            },
+                            "full_name": "Vini",
+                            "phone_number": "+5534998874599",
+                            "identification_document": "87895206310"
+                        }
+                    ],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/courses/2"
+                        },
+                        "courses": {
+                            "href": "http://localhost:6868/v1/courses?detailed=false"
+                        }
+                    }
+                },
+                {
+                    "id": 3,
+                    "name": "Git lab hands on!",
+                    "description": "The best course of school app",
+                    "students": [],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/courses/3"
+                        },
+                        "courses": {
+                            "href": "http://localhost:6868/v1/courses?detailed=false"
+                        }
+                    }
+                }
+            ]
+        },
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/courses?detailed=false"
+            }
+        }
+    }
+----
+GET - Find course by id
+----
+	localhost:6868/v1/courses/10
+----
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/courses/10'
+----
+Example Response
+----
+    {
+        "id": 10,
+        "name": "Git lab hands on!",
+        "description": "The best course of school app",
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/courses/10"
+            },
+            "courses": {
+                "href": "http://localhost:6868/v1/courses?detailed=false"
+            }
+        }
+    }
+----
+GET - Find all courses for a specific student
+----
+	localhost:6868/v1/courses/students/15
+----
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/courses/1'
+----
+Example Response
+----
+    {
+        "_embedded": {
+            "courses": [
+                {
+                    "id": 2,
+                    "name": "Git lab hands on!",
+                    "description": "The best course of school app",
+                    "students": [
+                        {
+                            "id": 1,
+                            "email": "joegold@gmail.com",
+                            "_links": {
+                                "self": {
+                                    "href": "http://localhost:6868/v1/students/1"
+                                }
+                            },
+                            "full_name": "Vini",
+                            "phone_number": "+5534998874599",
+                            "identification_document": "87895206310"
+                        }
+                    ],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/courses/2"
+                        },
+                        "courses": {
+                            "href": "http://localhost:6868/v1/courses?detailed=false"
+                        }
+                    }
+                }
+            ]
+        },
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/courses?detailed=false"
+            }
+        }
+    }
+----
+GET - Find all courses without any students
+----
+	localhost:6868/v1/courses/without-students
+----
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/courses/without-students'
+----
+Example Response
+----
+    {
+        "_embedded": {
+            "courses": [
+                {
+                    "id": 2,
+                    "name": "Git lab hands on!",
+                    "description": "The best course of school app",
+                    "students": [],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/courses/2"
+                        },
+                        "courses": {
+                            "href": "http://localhost:6868/v1/courses?detailed=false"
+                        }
+                    }
+                }
+            ]
+        },
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/courses?detailed=false"
+            }
+        }
+    }
+
+# Student
+POST - Create student
+----
+	localhost:6868/v1/students
+----
+Payload
+----
+	{
+        "name": "Git lab hands on!",
+        "description": "The best course of school app"
+    }
+----
+Example Request
+----
+    curl --location --request POST 'localhost:6868/v1/students' \
+    --data-raw '{
+        "identification_document": "12345678901",
+        "phone_number": "+553499995555",
+        "full_name": "Vini Brito",
+        "email": "vini@metadata.io"
+    }'
+----
+Example Response
+----
+    {
+        "id": 1,
+        "email": "vini@metadata.io",
+        "full_name": "Vini Brito",
+        "phone_number": "+553499995555",
+        "identification_document": "12345678901",
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students/1"
+            },
+            "students": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        }        
+    }
+----
+PUT - Update course
+----
+	localhost:6868/v1/students/1
+----
+Payload
+----
+	{
+        "email": "vini@metadata.io",
+        "full_name": "Vini Carneiro Brito",
+        "phone_number": "+553499995555"
+    }
+----
+Example Request
+----
+    curl --location --request PUT 'localhost:6868/v1/students/1' \
+    --data-raw '{
+        "email": "vini@metadata.io",
+        "full_name": "Vini Carneiro Brito",
+        "phone_number": "+553499995555"
+    }'
+----
+Example Response
+----
+    {
+        "id": 1,
+        "email": "vini@metadata.io",
+        "full_name": "Vini Carneiro Brito",
+        "phone_number": "+553499995555",
+        "identification_document": "12345678901",
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students/1"
+            },
+            "students": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        }        
+    }
+----
+GET - Find all students
+----
+	localhost:6868/v1/students
+----
+Parameters
+----
+	detailed = true or false
+----
+If the value of the verbose parameter equals true, the response will include the courses the student is enrolled in.
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/students?detailed=true'
+----
+Example Response
+----
+    {
+        "_embedded": {
+            "students": [
+                {
+                    "id": 1,
+                    "email": "joegold@gmail.com",                    
+                    "full_name": "Vini",
+                    "phone_number": "+5534998874599",
+                    "identification_document": "87895206310",
+                    "courses": [
+                        {
+                            "id": 2,
+                            "name": "Git lab hands on!",
+                            "description": "The best course of school app",
+                            "_links": {
+                                "self": {
+                                    "href": "http://localhost:6868/v1/courses/2"
+                                }
+                            }
+                        }
+                    ],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/students/1"
+                        },
+                        "students": {
+                            "href": "http://localhost:6868/v1/students?detailed=false"
+                        }
+                    },
+                },
+                {
+                    "id": 2,
+                    "email": "joegold@gmail.com",
+                    "full_name": "Joe Goldenberg",
+                    "phone_number": "+553499887777",
+                    "identification_document": "12345678901",
+                    "courses": [],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/students/2"
+                        },
+                        "students": {
+                            "href": "http://localhost:6868/v1/students?detailed=false"
+                        }
+                    }
+                }
+            ]
+        },
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        }
+    }
+----
+GET - Find student by id
+----
+	localhost:6868/v1/students/1
+----
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/students/1'
+----
+Example Response
+----
+    {
+        "id": 1,
+        "email": "vini@metadata.io",
+        "full_name": "Vini Carneiro Brito",
+        "phone_number": "+553499995555",
+        "identification_document": "12345678901",
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students/1"
+            },
+            "students": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        }        
+    }
+----
+GET - Find all students with a specific course
+----
+	localhost:6868/v1/students/courses/2
+----
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/students/courses/2'
+----
+Example Response
+----
+    {
+        "_embedded": {
+            "students": [
+                {
+                    "id": 1,
+                    "email": "vini@metadata.io",
+                    "full_name": "Vini",
+                    "phone_number": "+5534998874599",
+                    "identification_document": "87895206310",
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/students/1"
+                        },
+                        "students": {
+                            "href": "http://localhost:6868/v1/students?detailed=false"
+                        }
+                    },
+                    "courses": [
+                        {
+                            "id": 2,
+                            "name": "Git lab hands on!",
+                            "description": "The best course of school app",
+                            "_links": {
+                                "self": {
+                                    "href": "http://localhost:6868/v1/courses/2"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        }
+    }
+----
+GET - Find all students without any course
+----
+	localhost:6868/v1/students/without-courses
+----
+
+Example Request
+----
+	curl --location --request GET 'localhost:6868/v1/students/without-courses'
+----
+Example Response
+----
+    {
+        "_embedded": {
+            "students": [
+                {
+                    "id": 1,
+                    "email": "vini@metadata.io",
+                    "full_name": "Vini",
+                    "phone_number": "+5534998874599",
+                    "identification_document": "87895206310",
+                    "courses": [],
+                    "_links": {
+                        "self": {
+                            "href": "http://localhost:6868/v1/students/1"
+                        },
+                        "students": {
+                            "href": "http://localhost:6868/v1/students?detailed=false"
+                        }
+                    }
+                }
+            ]
+        },
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        }
+    }
+----
+PUT - Register to course
+----
+	localhost:6868/v1/students/1/courses/2
+----
+
+Example Request
+----
+	curl --location --request PUT 'localhost:6868/v1/students/1/courses/2'
+----
+Example Response
+----
+    {
+        "id": 1,
+        "email": "joegold@gmail.com",
+        "full_name": "Vini",
+        "phone_number": "+5534998874599",
+        "identification_document": "87895206310",
         "courses": [
             {
                 "id": 2,
                 "name": "Git lab hands on!",
                 "description": "The best course of school app",
-                "students": [
-                    {
-                        "id": 1,
-                        "email": "joegold@gmail.com",
-                        "_links": {
-                            "self": {
-                                "href": "http://localhost:6868/v1/students/1"
-                            }
-                        },
-                        "full_name": "Vini",
-                        "phone_number": "+5534998874599",
-                        "identification_document": "87895206310"
-                    }
-                ],
                 "_links": {
                     "self": {
                         "href": "http://localhost:6868/v1/courses/2"
-                    },
-                    "courses": {
-                        "href": "http://localhost:6868/v1/courses?detailed=false"
-                    }
-                }
-            },
-            {
-                "id": 3,
-                "name": "Git lab hands on!",
-                "description": "The best course of school app",
-                "students": [],
-                "_links": {
-                    "self": {
-                        "href": "http://localhost:6868/v1/courses/3"
-                    },
-                    "courses": {
-                        "href": "http://localhost:6868/v1/courses?detailed=false"
                     }
                 }
             }
-        ]
-    },
-    "_links": {
-        "self": {
-            "href": "http://localhost:6868/v1/courses?detailed=false"
-        }
+        ],
+        "_links": {
+            "self": {
+                "href": "http://localhost:6868/v1/students/1"
+            },
+            "students": {
+                "href": "http://localhost:6868/v1/students?detailed=false"
+            }
+        },
     }
-}
+----
+DELETE - Register to course
+----
+	localhost:6868/v1/students/1/courses/2
+----
+
+Example Request
+----
+	curl --location --request DELETE 'localhost:6868/v1/students/1/courses/2'
 ----
