@@ -1,4 +1,4 @@
-package io.metadata.schoolregistration.domain.usecase.student.register;
+package io.metadata.schoolregistration.domain.usecase.student.registercourse;
 
 import io.metadata.schoolregistration.domain.entity.Student;
 

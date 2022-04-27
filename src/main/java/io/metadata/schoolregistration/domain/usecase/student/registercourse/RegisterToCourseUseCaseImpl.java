@@ -1,4 +1,4 @@
-package io.metadata.schoolregistration.domain.usecase.student.register;
+package io.metadata.schoolregistration.domain.usecase.student.registercourse;
 
 import io.metadata.schoolregistration.domain.entity.Student;
 import io.metadata.schoolregistration.domain.gateway.CourseGateway;
@@ -17,7 +17,7 @@ public class RegisterToCourseUseCaseImpl implements RegisterToCourseUseCase {
     @Override
     public Student execute(Long studentId, Long courseId) {
         var student = studentGateway.findById(studentId, Boolean.TRUE);
-        var course = courseGateway.findById(courseId);
+        var course = courseGateway.findById(courseId, Boolean.FALSE);
         registerToCourseRule.executeRule(student, course);
         student.courses().ifPresent(courses -> courses.add(course));
         return studentGateway.persist(student, Boolean.TRUE);

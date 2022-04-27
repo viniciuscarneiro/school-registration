@@ -38,7 +38,7 @@ class CourseDataGatewayTest {
     void should_throws_entity_not_found_when_the_given_id_not_belongs_to_any_entity() {
         var courseId = 0L;
         when(courseEntityRepository.findById(courseId)).thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> courseGateway.findById(courseId));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> courseGateway.findById(courseId, Boolean.FALSE));
         verify(courseEntityRepository, times(1)).findById(courseId);
         verifyNoInteractions(courseMapper);
     }
@@ -55,7 +55,7 @@ class CourseDataGatewayTest {
         var course = new Course(Optional.of(courseId), courseName, courseDescription, Optional.empty());
         when(courseMapper.toDomain(courseEntity, Boolean.FALSE)).thenReturn(course);
         when(courseEntityRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
-        var result = courseGateway.findById(courseId);
+        var result = courseGateway.findById(courseId, Boolean.FALSE);
         assertAll(
                 () -> assertNotNull(result),
                 () -> assertEquals(courseEntity.getId(), result.id().orElseThrow()),

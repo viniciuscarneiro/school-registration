@@ -1,4 +1,4 @@
-package io.metadata.schoolregistration.domain.usecase.student;
+package io.metadata.schoolregistration.domain.usecase.student.unregistercourse;
 
 import io.metadata.schoolregistration.domain.entity.Course;
 import io.metadata.schoolregistration.domain.entity.Student;
@@ -54,10 +54,10 @@ class UnregisterToCourseUseCaseTest {
         var studentWithoutCourse = new Student(
                 Optional.of(studentId), fullName, email, phoneNumber, identificationDocument, Optional.of(Set.of()));
         when(studentGateway.findById(studentId, Boolean.TRUE)).thenReturn(studentWithCourse);
-        when(courseGateway.findById(courseId)).thenReturn(courseToUnregister);
+        when(courseGateway.findById(courseId, Boolean.FALSE)).thenReturn(courseToUnregister);
         assertDoesNotThrow(() -> unregisterFromCourseUseCase.execute(studentId, courseId));
         verify(studentGateway, times(1)).findById(studentId, Boolean.TRUE);
-        verify(courseGateway, times(1)).findById(courseId);
+        verify(courseGateway, times(1)).findById(courseId, Boolean.FALSE);
         verify(studentGateway, times(1)).persist(studentWithoutCourse, Boolean.FALSE);
     }
 }

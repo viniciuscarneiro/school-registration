@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -34,20 +35,19 @@ public class CourseDataGateway implements CourseGateway {
     }
 
     @Override
-    public Course findById(Long courseId) {
-        return courseEntityRepository
-                .findById(courseId)
-                .map(courseEntity -> courseMapper.toDomain(courseEntity, Boolean.FALSE))
-                .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND_ERROR_MESSAGE.formatted(courseId)));
+    public Course findById(Long courseId, Boolean detailedResponse) {
+        if (Boolean.TRUE.equals(detailedResponse)) {
+            return mapToCourse(courseId, courseEntityRepository.findDetailedById(courseId), Boolean.TRUE);
+        }
+        return mapToCourse(courseId, courseEntityRepository.findById(courseId), Boolean.FALSE);
     }
 
     @Override
     public List<Course> findAll(Boolean detailedResponse) {
         if (Boolean.TRUE.equals(detailedResponse)) {
             return mapToCoursesList(courseEntityRepository.findAllBy(), Boolean.TRUE);
-        } else {
-            return mapToCoursesList(courseEntityRepository.findAll(), Boolean.FALSE);
         }
+        return mapToCoursesList(courseEntityRepository.findAll(), Boolean.FALSE);
     }
 
     @Override
@@ -68,5 +68,11 @@ public class CourseDataGateway implements CourseGateway {
         return courseEntities.stream()
                 .map(courseEntity -> courseMapper.toDomain(courseEntity, detailed))
                 .toList();
+    }
+
+    private Course mapToCourse(Long courseId, Optional<CourseEntity> optionalCourseEntity, Boolean detailed) {
+        return optionalCourseEntity
+                .map(courseEntity -> courseMapper.toDomain(courseEntity, detailed))
+                .orElseThrow(() -> new EntityNotFoundException(COURSE_NOT_FOUND_ERROR_MESSAGE.formatted(courseId)));
     }
 }

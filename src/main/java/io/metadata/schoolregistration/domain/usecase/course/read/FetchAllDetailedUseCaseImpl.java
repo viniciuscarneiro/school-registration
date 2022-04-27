@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("findAllCoursesDetailedUseCase")
+@Service("fetchAllDetailedCoursesUseCase")
 @RequiredArgsConstructor
 public class FetchAllDetailedUseCaseImpl implements FetchAllUseCase<Course> {
 

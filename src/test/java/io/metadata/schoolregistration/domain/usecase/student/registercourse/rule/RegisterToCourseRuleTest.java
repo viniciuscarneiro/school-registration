@@ -1,8 +1,8 @@
-package io.metadata.schoolregistration.domain.usecase.student.rule;
+package io.metadata.schoolregistration.domain.usecase.student.registercourse.rule;
 
 import io.metadata.schoolregistration.domain.entity.Course;
 import io.metadata.schoolregistration.domain.entity.Student;
-import io.metadata.schoolregistration.domain.usecase.student.register.RegisterToCourseRule;
+import io.metadata.schoolregistration.domain.usecase.student.registercourse.RegisterToCourseRule;
 import io.metadata.schoolregistration.infra.error.exception.CourseEnrollmentLimitException;
 import io.metadata.schoolregistration.infra.error.exception.StudentAlreadyEnrolledInCourseException;
 import io.metadata.schoolregistration.infra.error.exception.StudentEnrollmentLimitException;

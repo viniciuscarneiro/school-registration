@@ -15,7 +15,7 @@ public class UnregisterFromCourseUseCaseImpl implements UnregisterFromCourseUseC
     @Override
     public void execute(Long studentId, Long courseId) {
         var student = studentGateway.findById(studentId, Boolean.TRUE);
-        var course = courseGateway.findById(courseId);
+        var course = courseGateway.findById(courseId, Boolean.FALSE);
         student.courses().ifPresent(courses -> courses.remove(course));
         studentGateway.persist(student, Boolean.FALSE);
     }

@@ -13,6 +13,6 @@ public class FetchByIdUseCaseImpl implements FetchByIdUseCase<Course> {
 
     @Override
     public Course execute(Long courseId) {
-        return courseGateway.findById(courseId);
+        return courseGateway.findById(courseId, Boolean.FALSE);
     }
 }

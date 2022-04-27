@@ -12,7 +12,7 @@ public interface CourseGateway {
 
     Boolean existsById(Long courseId);
 
-    Course findById(Long courseId);
+    Course findById(Long courseId, Boolean detailedResponse);
 
     List<Course> findAll(Boolean detailedResponse);
 

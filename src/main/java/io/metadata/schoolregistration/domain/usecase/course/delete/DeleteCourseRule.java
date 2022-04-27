@@ -10,7 +10,7 @@ import java.util.Set;
 @Component
 public record DeleteCourseRule(CourseGateway courseGateway) {
     public void executeRule(Long courseId) {
-        var course = courseGateway.findById(courseId);
+        var course = courseGateway.findById(courseId, Boolean.TRUE);
         course.students().ifPresent(this::validateIfHasStudents);
     }
 

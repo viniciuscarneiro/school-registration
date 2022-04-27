@@ -33,11 +33,11 @@ public class CourseResource {
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
     @Qualifier("fetchCourseByIdUseCase")
-    private final FetchByIdUseCase<Course> fetchCourseByIdUseCase;
-    @Qualifier("findAllSummarizedCoursesUseCase")
-    private final FetchAllUseCase<Course> findAllSummarizedCoursesUseCase;
-    @Qualifier("findAllDetailedCoursesUseCase")
-    private final FetchAllUseCase<Course> findAllDetailedCoursesUseCase;
+    private final FetchByIdUseCase<Course> fetchByIdUseCase;
+    @Qualifier("fetchAllSummarizedCoursesUseCase")
+    private final FetchAllUseCase<Course> fetchAllSummarizeUseCase;
+    @Qualifier("fetchAllDetailedCoursesUseCase")
+    private final FetchAllUseCase<Course> fetchAllDetailedUseCase;
     private final FindAllForSpecificStudentUseCase findAllForSpecificStudentUseCase;
     private final FindAllWithoutStudentsUseCase findAllWithoutStudentsUseCase;
     private final CourseModelAssembler courseModelAssembler;
@@ -75,7 +75,7 @@ public class CourseResource {
 
     @GetMapping("/courses/{id}")
     public ResponseEntity<CourseModel> findById(@PathVariable Long id) {
-        var result = fetchCourseByIdUseCase.execute(id);
+        var result = fetchByIdUseCase.execute(id);
         return ResponseEntity.ok(courseModelAssembler.toModel(result));
     }
 
@@ -84,9 +84,9 @@ public class CourseResource {
             @RequestParam(value = "detailed", defaultValue = "false") Boolean detailed) {
         var result = new ArrayList<Course>();
         if (Boolean.TRUE.equals(detailed)) {
-            result.addAll(findAllDetailedCoursesUseCase.execute());
+            result.addAll(fetchAllDetailedUseCase.execute());
         } else {
-            result.addAll(findAllSummarizedCoursesUseCase.execute());
+            result.addAll(fetchAllSummarizeUseCase.execute());
         }
         return ResponseEntity.ok(courseModelAssembler.toCollectionModel(result));
     }

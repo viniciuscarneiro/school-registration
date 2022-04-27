@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseEntityRepository extends CrudRepository<CourseEntity, Long> {
@@ -19,4 +20,7 @@ public interface CourseEntityRepository extends CrudRepository<CourseEntity, Lon
     List<CourseEntity> findByStudentEntitiesId(Long studentId);
 
     List<CourseEntity> findByStudentEntitiesIsNull();
+
+    @EntityGraph(attributePaths = {"studentEntities"})
+    Optional<CourseEntity> findDetailedById(Long courseId);
 }

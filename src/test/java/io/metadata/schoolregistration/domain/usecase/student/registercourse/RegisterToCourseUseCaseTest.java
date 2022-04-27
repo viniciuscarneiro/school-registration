@@ -1,11 +1,9 @@
-package io.metadata.schoolregistration.domain.usecase.student;
+package io.metadata.schoolregistration.domain.usecase.student.registercourse;
 
 import io.metadata.schoolregistration.domain.entity.Course;
 import io.metadata.schoolregistration.domain.entity.Student;
 import io.metadata.schoolregistration.domain.gateway.CourseGateway;
 import io.metadata.schoolregistration.domain.gateway.StudentGateway;
-import io.metadata.schoolregistration.domain.usecase.student.register.RegisterToCourseRule;
-import io.metadata.schoolregistration.domain.usecase.student.register.RegisterToCourseUseCaseImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,7 +45,7 @@ class RegisterToCourseUseCaseTest {
         var student = new Student(
                 Optional.of(studentId), fullName, email, phoneNumber, identificationDocument, Optional.empty());
         when(studentGateway.findById(studentId, Boolean.TRUE)).thenReturn(student);
-        when(courseGateway.findById(courseId)).thenReturn(courseToRegister);
+        when(courseGateway.findById(courseId, Boolean.FALSE)).thenReturn(courseToRegister);
         doNothing().when(registerToCourseRule).executeRule(student, courseToRegister);
         var persistedStudent = new Student(
                 Optional.of(studentId),
@@ -70,7 +68,7 @@ class RegisterToCourseUseCaseTest {
                     assertTrue(courseResult.students().isEmpty());
                 });
         verify(studentGateway, times(1)).findById(studentId, Boolean.TRUE);
-        verify(courseGateway, times(1)).findById(courseId);
+        verify(courseGateway, times(1)).findById(courseId, Boolean.FALSE);
         verify(registerToCourseRule, times(1)).executeRule(student, courseToRegister);
         verify(studentGateway, times(1)).persist(student, Boolean.TRUE);
     }

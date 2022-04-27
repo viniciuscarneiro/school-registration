@@ -6,7 +6,7 @@ import io.metadata.schoolregistration.domain.usecase.FetchByIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service("findStudentByIdUseCase")
+@Service("fetchStudentByIdUseCase")
 @RequiredArgsConstructor
 public class FetchByIdUseCaseImpl implements FetchByIdUseCase<Student> {
     private final StudentGateway studentGateway;
